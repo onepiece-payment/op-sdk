@@ -1,6 +1,6 @@
 # how to start
  
- * Run `npm install @onepiecepayment/op-sdk --save` to install the latest private package. 
+ * Run `npm install op-sdk --save` to install the latest private package. 
  
 
 # demo usage
@@ -10,7 +10,7 @@ In order to use the op-sdk in your node app, you will need to `require` and setu
 ```
   ...
   //op-sdk required
-  const Opsdk = require('@onepiecepayment/op-sdk');
+  const Opsdk = require('op-sdk');
   ...
   
   //create new Opsdk instance with required constructor
