@@ -79,5 +79,5 @@ This function will be used to initiate a payment transaction. The function takes
 *3) `.goGetPaymentStatus()`
 When the payment has been recieved or updated, One-Piece will send the status to the provided notify_url. In the event when the user wants to check the transaction status, this call can be used to get the status of the specific transaction. The call takes in the `paymentToken` as a parameter and will return with a status. User will be able to view the trasaction details in the Admin Console.*
 
-Admin Console: https://admin.one-piece.us
+Admin Console: https://admin.one-piece.us<br/>
 Questions: onepiece.payment@gmail.com
