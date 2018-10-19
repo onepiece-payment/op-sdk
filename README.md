@@ -138,7 +138,17 @@ Method: GET
 | signature | md5(magic_num + pirate_token) |
 <br>
 
-## 2) Get 
+## 2) Get acceptable price list<br>
+Description: This function will be used when the user needs to get the list of acceptable price. Our system will respond with an array of available price list.<br>
+URL: https://api.one-piece.us/payment/prices/{pirate_token}/{magic_num}/{signature}<br>
+Method: GET
+
+| Parameters | Description |
+| --- | --- |
+| pirate_token | This value can be found in the Admin Console |
+| magic_num | One random number |
+| signature | md5(magic_num + pirate_token) |
+
 
 
 ## 2) Initiate payment<br>
