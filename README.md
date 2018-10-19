@@ -26,8 +26,9 @@ let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in t
 | No. | Purpose | Method | Parameter(s) | Description |
 | --- | --- | --- | --- | --- |
 | 1 | Get Available Payment Methods | findPaymentMethods() | pirate_token | This function will be used when the user needs to get the list of available payment methods. It takes in the `pirate_token` as a parameter. Our system will respond with an array of available payment methods. |
-| 2 | Initiate Payment | initPayment() | options | This function will be used to initiate a payment transaction. It takes in an object called `options` as a request body (See `options` requirements below). Once the transaction is initiated properly, our system will generate a transaction and respond with a paymentToken as well as a link to the QR Code. Once payment has been received, the system will automatically redirect to the provided "return_url". The transaction will also be displayed in the Admin Console. |
-| 3 | Get Payment Status | checkPaymentStatus() | payment_token | When the payment has been recieved or updated, our system will send a POST request to the provided "notify_url" with payment status. In the event when the user wants to check the transaction status, this call can be used to get the status of the specific transaction. The call takes in the `payment_token` as a parameter and will return with a status. User will be able to view the transaction details in the Admin Console. |
+| 2 | Get Acceptable Price | findAvailiblePriceList() | none | This function will be used when the user needs to get the list of acceptable price. Our system will respond with an array of available price list. |
+| 3 | Initiate Payment | initPayment() | options | This function will be used to initiate a payment transaction. It takes in an object called `options` as a request body (See `options` requirements below). Once the transaction is initiated properly, our system will generate a transaction and respond with a paymentToken as well as a link to the QR Code. Once payment has been received, the system will automatically redirect to the provided "return_url". The transaction will also be displayed in the Admin Console. |
+| 4 | Get Payment Status | checkPaymentStatus() | payment_token | When the payment has been recieved or updated, our system will send a POST request to the provided "notify_url" with payment status. In the event when the user wants to check the transaction status, this call can be used to get the status of the specific transaction. The call takes in the `payment_token` as a parameter and will return with a status. User will be able to view the transaction details in the Admin Console. |
 
 ## Request parameters
 
@@ -79,6 +80,17 @@ In order to use the op-sdk in your node app, you will need to `require` and setu
       console.log(availableMethods);
       res.render('index', { title: "Available Methods", data: availableMethods })
   })
+
+  //sample route to get acceptable price list
+  router.get('/price', async (req, res) => {
+
+      const getAcceptablePriceList = await newMerchant.findAvailiblePriceList();
+      const priceList = getAcceptablePriceList.payload.prices;
+      
+      //Logging response data
+      console.log(priceList);
+      res.render('index', { title: "Available Prices", data: priceList })
+  })
   
   //sample route to initiate payment
   router.get('/checkout', async (req, res) => {
@@ -125,6 +137,9 @@ Method: GET
 | magic_num | One random number |
 | signature | md5(magic_num + pirate_token) |
 <br>
+
+## 2) Get 
+
 
 ## 2) Initiate payment<br>
 Description: This function will be used to initiate a payment transaction. It takes in an object called `options` as a request body (See `options` requirements below). Once the transaction is initiated properly, our system will generate a transaction and respond with a paymentToken as well as a link to the QR Code. Once payment has been received, the system will automatically redirect to the provided "return_url". The user will be able to view the transaction details in the Admin Console.<br>
