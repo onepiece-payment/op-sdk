@@ -26,7 +26,7 @@ let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in t
 | No. | Purpose | Method | Parameter(s) | Description |
 | --- | --- | --- | --- | --- |
 | 1 | Get Available Payment Methods | findPaymentMethods() | pirate_token | This function will be used when the user needs to get the list of available payment methods. It takes in the `pirate_token` as a parameter. Our system will respond with an array of available payment methods. |
-| 2 | Get Acceptable Price | findAvailiblePriceList() | none | This function will be used when the user needs to get the list of acceptable price. Our system will respond with an array of available price list. |
+| 2 | Get Acceptable Price List | findAvailiblePriceList() | none | This function will be used when the user needs to get the list of acceptable price. Our system will respond with an array of available price list. |
 | 3 | Initiate Payment | initPayment() | options | This function will be used to initiate a payment transaction. It takes in an object called `options` as a request body (See `options` requirements below). Once the transaction is initiated properly, our system will generate a transaction and respond with a paymentToken as well as a link to the QR Code. Once payment has been received, the system will automatically redirect to the provided "return_url". The transaction will also be displayed in the Admin Console. |
 | 4 | Get Payment Status | checkPaymentStatus() | payment_token | When the payment has been recieved or updated, our system will send a POST request to the provided "notify_url" with payment status. In the event when the user wants to check the transaction status, this call can be used to get the status of the specific transaction. The call takes in the `payment_token` as a parameter and will return with a status. User will be able to view the transaction details in the Admin Console. |
 
@@ -56,6 +56,7 @@ let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in t
 | Field name | Variable name | Required | Types of | Sample value | Description |
 | --- | --- | --- | --- | --- | --- |
 | Payment Token | payment_token | yes | string(32) | TRANS_4b2107c69eb522be74c90cbbdcd1064c | Token to get payment status |
+<br><br><br>
 
 ## Example for express app
 
@@ -123,7 +124,7 @@ In order to use the op-sdk in your node app, you will need to `require` and setu
 
   module.exports = router;
 ```
-<br><br>
+<br><br><br>
 
 # Option 2: Make direct calls to our system
 ## 1) Get available payment methods from our system<br>
@@ -148,10 +149,9 @@ Method: GET
 | pirate_token | This value can be found in the Admin Console |
 | magic_num | One random number |
 | signature | md5(magic_num + pirate_token) |
+<br>
 
-
-
-## 2) Initiate payment<br>
+## 3) Initiate payment<br>
 Description: This function will be used to initiate a payment transaction. It takes in an object called `options` as a request body (See `options` requirements below). Once the transaction is initiated properly, our system will generate a transaction and respond with a paymentToken as well as a link to the QR Code. Once payment has been received, the system will automatically redirect to the provided "return_url". The user will be able to view the transaction details in the Admin Console.<br>
 URL: https://api.one-piece.us/payment/<br>
 Method: POST<br>
@@ -161,6 +161,7 @@ Body: {options}
 | --- | --- | --- | --- | --- | --- |
 | Amount | amount | yes | int | 100 | 100 = ￥1, 10000 = ￥100 |
 | Payment Method | payment_method | yes | string(32) | wechatpay | value must be one of the following strings: wechatpay / alipay / qqpay / jdpay |
+| Priate Token | pirate_token | yes | string(32) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This value can be found in the Admin Console |
 | Notify Url | notify_url | yes | string(32) | http://yourcompany.com/notify/wechat | Our system will make a POST call to this url with the payment status once we receive an update from the payment method's merchant |
 | Return Url | return_url | yes | string(32) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
 | Customer's ip address | browser_ip_address | optional | string(32) | 293.242.53.21 | Payee's ip address |
@@ -169,14 +170,15 @@ Body: {options}
 | Static Signature | signature | yes | string(32) | id83ud84ufje73h skd93hr5ghs83j | md5(magic_num + '' + amount + payment_method + pirate_token + notify_url) |
 <br>
 
-## 3) Get payment status<br>
+## 4) Get payment status<br>
 Description: When the payment has been recieved or updated, Our system will make a POST call to the provided "notify_url" with the payment status. In the event when the user wants to check the transaction status, this call can be used to get the status of the specific transaction. The call takes in the `payment_token` as a parameter and will return with a status. User will be able to view the trasaction details in the Admin Console.<br>
-URL: https://api.one-piece.us/payment/{payment_token}/{magic_num}/{signature}<br>
+URL: https://api.one-piece.us/payment/status/{pirate_token}/{payment_token}/{magic_num}/{signature}<br>
 Method: GET
 
 | Parameters | Description |
 | --- | --- |
-| payment_token | This token can be found in the return response from the initiate payment method above - `#2` |
+| pirate_token | This value can be found in the Admin Console |
+| payment_token | This token can be found in the return response from the initiate payment method above - `#3` |
 | magicNum | One random number |
 | signature | md5(magic_num + payment_token) |
 
