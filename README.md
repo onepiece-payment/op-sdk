@@ -25,7 +25,7 @@ let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in t
 ## Available methods from this sdk
 | No. | Purpose | Method | Parameter(s) | Description |
 | --- | --- | --- | --- | --- |
-| 1 | Get Available Payment Methods | findPaymentMethods() | pirate_token | This function will be used when the user needs to get the list of available payment methods. It takes in the `pirate_token` as a parameter. Our system will respond with an array of available payment methods. |
+| 1 | Get Available Payment Methods | findPaymentMethods() | none | This function will be used when the user needs to get the list of available payment methods. Our system will respond with an array of available payment methods. |
 | 2 | Get Acceptable Price List | findAvailiblePriceList() | none | This function will be used when the user needs to get the list of acceptable price. Our system will respond with an array of available price list. |
 | 3 | Initiate Payment | initPayment() | options | This function will be used to initiate a payment transaction. It takes in an object called `options` as a request body (See `options` requirements below). Once the transaction is initiated properly, our system will generate a transaction and respond with a paymentToken as well as a link to the QR Code. Once payment has been received, the system will automatically redirect to the provided "return_url". The transaction will also be displayed in the Admin Console. |
 | 4 | Get Payment Status | checkPaymentStatus() | payment_token | When the payment has been recieved or updated, our system will send a POST request to the provided "notify_url" with payment status. In the event when the user wants to check the transaction status, this call can be used to get the status of the specific transaction. The call takes in the `payment_token` as a parameter and will return with a status. User will be able to view the transaction details in the Admin Console. |
@@ -35,27 +35,22 @@ let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in t
 ## OPSdk (for op-sdk constructor)
 | Field name | Variable name | Required | Types of | Sample value | Description |
 | --- | --- | --- | --- | --- | --- |
-| Pirate Token | pirate_token | yes | string(32) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This data can be found in the Admin console |
-
-## Get Available Payment Methods (pirate_token)
-| Field name | Variable name | Required | Types of | Sample value | Description |
-| --- | --- | --- | --- | --- | --- |
-| Pirate Token | pirate_token | yes | string(32) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This data can be found in the Admin console |
+| Pirate Token | pirate_token | yes | string(145) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This data can be found in the Admin console |
 
 ## Initiate Payment (options)
 | Field name | Variable name | Required | Types of | Sample value | Description |
 | --- | --- | --- | --- | --- | --- |
 | Amount | amount | yes | int | 100 | 100 = ￥1, 10000 = ￥100 |
 | Payment Method | payment_method | yes | string(32) | wechatpay | value must be one of the following strings: wechatpay / alipay / qqpay |
-| Notify Url | notify_url | yes | string(32) | http://yourcompany.com/notify/wechat | Our system will make a POST call to this url with the payment status once we receive an update from the payment method's merchant |
-| Return Url | return_url | yes | string(32) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
-| Customer's ip address | browser_ip_address | optional | string(32) | 293.242.53.21 | Payee's ip address |
-| Customer's mac address | browser_mac_address | optional | string(32) | 00-14-22-01-23-45 | Payee's mac address |
+| Notify Url | notify_url | yes | string(200) | http://yourcompany.com/notify/wechat | Our system will make a POST call to this url with the payment status once we receive an update from the payment method's merchant |
+| Return Url | return_url | yes | string(200) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
+| Customer's ip address | browser_ip_address | optional | string(65) | 293.242.53.21 | Payee's ip address |
+| Customer's mac address | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
 
 ## Get Payment Status (payment_token)
 | Field name | Variable name | Required | Types of | Sample value | Description |
 | --- | --- | --- | --- | --- | --- |
-| Payment Token | payment_token | yes | string(32) | TRANS_4b2107c69eb522be74c90cbbdcd1064c | Token to get payment status |
+| Payment Token | payment_token | yes | string(145) | TRANS_4b2107c69eb522be74c90cbbdcd1064c | Token to get payment status |
 <br><br><br>
 
 ## Example for express app
@@ -74,7 +69,7 @@ In order to use the op-sdk in your node app, you will need to `require` and setu
   //sample route to get available payment methods
   router.get('/methods', async (req, res) => {
 
-      const getAvailableMethods = await newMerchant.findPaymentMethods(pirate_token);
+      const getAvailableMethods = await newMerchant.findPaymentMethods();
       const availableMethods = getAvailableMethods.payload.methods;
 
       //Logging response data
