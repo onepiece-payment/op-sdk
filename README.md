@@ -156,13 +156,13 @@ Body: {options}
 | --- | --- | --- | --- | --- | --- |
 | Amount | amount | yes | int | 100 | 100 = ￥1, 10000 = ￥100 |
 | Payment Method | payment_method | yes | string(32) | wechatpay | value must be one of the following strings: wechatpay / alipay / qqpay / jdpay |
-| Priate Token | pirate_token | yes | string(32) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This value can be found in the Admin Console |
-| Notify Url | notify_url | yes | string(32) | http://yourcompany.com/notify/wechat | Our system will make a POST call to this url with the payment status once we receive an update from the payment method's merchant |
-| Return Url | return_url | yes | string(32) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
-| Customer's ip address | browser_ip_address | optional | string(32) | 293.242.53.21 | Payee's ip address |
-| Customer's mac address | browser_mac_address | optional | string(32) | 00-14-22-01-23-45 | Payee's mac address |
-|Magic Number | magicNum | yes | string(32) | 888 | One random number |
-| Static Signature | signature | yes | string(32) | id83ud84ufje73h skd93hr5ghs83j | md5(magic_num + '' + amount + payment_method + pirate_token + notify_url) |
+| Priate Token | pirate_token | yes | string(145) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This value can be found in the Admin Console |
+| Notify Url | notify_url | yes | string(200) | http://yourcompany.com/notify/wechat | Our system will make a POST call to this url with the payment status once we receive an update from the payment method's merchant |
+| Return Url | return_url | yes | string(200) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
+| Customer's ip address | browser_ip_address | optional | string(65) | 293.242.53.21 | Payee's ip address |
+| Customer's mac address | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
+|Magic Number | magicNum | yes | int | 888 | One random number |
+| Static Signature | signature | yes | string(32) | id83ud84ufje73h skd93hr5ghs83j | md5(magic_num + '' + amount + payment_method + pirate_token + notify_url + return_url) |
 <br>
 
 ## 4) Get payment status<br>
@@ -175,7 +175,7 @@ Method: GET
 | pirate_token | This value can be found in the Admin Console |
 | payment_token | This token can be found in the return response from the initiate payment method above - `#3` |
 | magicNum | One random number |
-| signature | md5(magic_num + payment_token) |
+| signature | md5(magic_num + pirate_token + payment_token) |
 
 <br><br>
 
