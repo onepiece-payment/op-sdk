@@ -1,6 +1,10 @@
 {
   "name": "op-sdk",
+<<<<<<< HEAD
   "version": "1.0.15",
+=======
+  "version": "2.0.3",
+>>>>>>> dd4d43a2d774f64045279369d69542d35f633114
   "scripts": {
     "start": "node ./bin/www"
   },
