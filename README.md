@@ -19,7 +19,7 @@ This package is publicly available for anyone to install. However, you will need
 
 import OPSdk from 'op-sdk';
 
-let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in the Admin Console
+let newMerchant = new OPSdk(pirate_token, pirate_key) //The "pirate_token" and "pirate_key" can be found in the Admin Console
 ```
 
 ## Available methods from this sdk
@@ -36,6 +36,7 @@ let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in t
 | Field name | Variable name | Required | Types of | Sample value | Description |
 | --- | --- | --- | --- | --- | --- |
 | Pirate Token | pirate_token | yes | string(145) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This data can be found in the Admin console |
+| Pirate Key | pirate_key | yes | string(145) | SECRET_b956db50a8ffac2d82a253a28259d07f | This data can be found in the Admin console |
 
 ## Initiate Payment (options)
 | Field name | Variable name | Required | Types of | Sample value | Description |
@@ -46,6 +47,7 @@ let newMerchant = new OPSdk(pirate_token) //The "pirate_token" can be found in t
 | Return Url | return_url | yes | string(200) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
 | Customer's ip address | browser_ip_address | optional | string(65) | 293.242.53.21 | Payee's ip address |
 | Customer's mac address | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
+| Custom order number | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
 
 ## Get Payment Status (payment_token)
 | Field name | Variable name | Required | Types of | Sample value | Description |
