@@ -8,7 +8,7 @@
 # Option 1: Utilizing the npm op-sdk
 
 ## How does op-sdk work
-This package is publicly available for anyone to install. However, you will need to sign up an account with One-Piece in order to be able to use our service. With this sdk and your One-Piece account, you will be able to get available payment methods, initate payments and check status of a specific transaction. 
+This package is publicly available for anyone to install. However, you will need to sign up an account with One-Piece in order to be able to use our service. With this sdk and your One-Piece account, you will be able to get available payment methods, get the list of acceptable price list, initate payments and check status of a specific transaction. 
 
 ## How to start
  * Run `npm install op-sdk --save` to install the latest npm package. 
@@ -26,7 +26,7 @@ let newMerchant = new OPSdk(pirate_token, pirate_key) //The "pirate_token" and "
 | No. | Purpose | Method | Parameter(s) | Description |
 | --- | --- | --- | --- | --- |
 | 1 | Get Available Payment Methods | findPaymentMethods() | none | This function will be used when the user needs to get the list of available payment methods. Our system will respond with an array of available payment methods. |
-| 2 | Get Acceptable Price List | findAvailiblePriceList() | none | This function will be used when the user needs to get the list of acceptable price. Our system will respond with an array of available price list. |
+| 2 | Get Acceptable Price List | findAvailablePriceList() | none | This function will be used when the user needs to get the list of acceptable price. Our system will respond with an array of available price list. |
 | 3 | Initiate Payment | initPayment() | options | This function will be used to initiate a payment transaction. It takes in an object called `options` as a request body (See `options` requirements below). Once the transaction is initiated properly, our system will generate a transaction and respond with a paymentToken as well as a link to the QR Code. Once payment has been received, the system will automatically redirect to the provided "return_url". The transaction will also be displayed in the Admin Console. |
 | 4 | Get Payment Status | checkPaymentStatus() | payment_token | When the payment has been recieved or updated, our system will send a POST request to the provided "notify_url" with payment status. In the event when the user wants to check the transaction status, this call can be used to get the status of the specific transaction. The call takes in the `payment_token` as a parameter and will return with a status. User will be able to view the transaction details in the Admin Console. |
 
@@ -45,6 +45,7 @@ let newMerchant = new OPSdk(pirate_token, pirate_key) //The "pirate_token" and "
 | Payment Method | payment_method | yes | string(32) | wechatpay | value must be one of the following strings: wechatpay / alipay / qqpay |
 | Notify Url | notify_url | yes | string(200) | http://yourcompany.com/notify/wechat | Our system will make a POST call to this url with the payment status once we receive an update from the payment method's merchant |
 | Return Url | return_url | yes | string(200) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
+| Customized Order Id | order_num | optional | string(100) | sdkfj03r23958eesdf | Your customized order id |
 | Customer's ip address | browser_ip_address | optional | string(65) | 293.242.53.21 | Payee's ip address |
 | Customer's mac address | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
 | Custom order number | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
@@ -66,7 +67,7 @@ In order to use the op-sdk in your node app, you will need to `require` and setu
   ...
   
   //create new Opsdk instance with required constructor
-  let newMerchant = new Opsdk(pirate_token) //The "pirate_token" can be retrieved from Admin Console
+  let newMerchant = new Opsdk(pirate_token, pirate_key) //The "pirate_token" and "pirate_key" can be retrieved from Admin Console
 
   //sample route to get available payment methods
   router.get('/methods', async (req, res) => {
@@ -82,7 +83,7 @@ In order to use the op-sdk in your node app, you will need to `require` and setu
   //sample route to get acceptable price list
   router.get('/price', async (req, res) => {
 
-      const getAcceptablePriceList = await newMerchant.findAvailiblePriceList();
+      const getAcceptablePriceList = await newMerchant.findAvailablePriceList();
       const priceList = getAcceptablePriceList.payload.prices;
       
       //Logging response data
@@ -102,6 +103,7 @@ In order to use the op-sdk in your node app, you will need to `require` and setu
             'payment_method': 'wechatpay', //payment_method must be spelled exactly as: 'wechatpay', 'alipay' or 'qqpay'
             'notify_url': notify_url,
             'return_url': return_url,
+            'order_num': '123456789', //optional
             'browser_ip_address': 'provideCustomerIP', //optional
             'browser_mac_address': 'provideCustomerMacAddress', //optional
       };
@@ -133,7 +135,7 @@ Method: GET
 | --- | --- |
 | pirate_token | This value can be found in the Admin Console |
 | magic_num | One random number |
-| signature | md5(magic_num + pirate_token) |
+| signature | md5(magic_num + pirate_token + pirate_key) |
 <br>
 
 ## 2) Get acceptable price list<br>
@@ -145,7 +147,7 @@ Method: GET
 | --- | --- |
 | pirate_token | This value can be found in the Admin Console |
 | magic_num | One random number |
-| signature | md5(magic_num + pirate_token) |
+| signature | md5(magic_num + pirate_token + pirate_key) |
 <br>
 
 ## 3) Initiate payment<br>
@@ -161,10 +163,11 @@ Body: {options}
 | Priate Token | pirate_token | yes | string(145) | PIRATE_b956db50a8ffac2d82a253a28259d07f | This value can be found in the Admin Console |
 | Notify Url | notify_url | yes | string(200) | http://yourcompany.com/notify/wechat | Our system will make a POST call to this url with the payment status once we receive an update from the payment method's merchant |
 | Return Url | return_url | yes | string(200) | http://yourcompany.com/pay/success | Your desired redirect destination url once the payment has been received |
+| Customized Order Id | order_num | optional | string(100) | 12345678 | Your customized order id |
 | Customer's ip address | browser_ip_address | optional | string(65) | 293.242.53.21 | Payee's ip address |
 | Customer's mac address | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
 |Magic Number | magicNum | yes | int | 888 | One random number |
-| Static Signature | signature | yes | string(32) | id83ud84ufje73h skd93hr5ghs83j | md5(magic_num + '' + amount + payment_method + pirate_token + notify_url + return_url) |
+| Static Signature | signature | yes | string(32) | id83ud84ufje73h skd93hr5ghs83j | md5(magic_num + '' + amount + payment_method + pirate_token + notify_url + return_url + pirate_key) |
 <br>
 
 ## 4) Get payment status<br>
@@ -177,7 +180,7 @@ Method: GET
 | pirate_token | This value can be found in the Admin Console |
 | payment_token | This token can be found in the return response from the initiate payment method above - `#3` |
 | magicNum | One random number |
-| signature | md5(magic_num + pirate_token + payment_token) |
+| signature | md5(magic_num + pirate_token + payment_token + pirate_key) |
 
 <br><br>
 
