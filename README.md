@@ -135,7 +135,7 @@ Method: GET
 | --- | --- |
 | pirate_token | This value can be found in the Admin Console |
 | magic_num | One random number |
-| signature | md5(`${magicNum}${pirate_token} + pirate_token + pirate_key`) |
+| signature | md5(`${magicNum}${pirate_token}${pirate_key}`) |
 <br>
 
 ## 2) Get acceptable price list<br>
@@ -147,7 +147,7 @@ Method: GET
 | --- | --- |
 | pirate_token | This value can be found in the Admin Console |
 | magic_num | One random number |
-| signature | md5(magic_num + pirate_token + pirate_key) |
+| signature | md5(`${magicNum}${pirate_token}${pirate_key}`) |
 <br>
 
 ## 3) Initiate payment<br>
