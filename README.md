@@ -135,7 +135,7 @@ Method: GET
 | --- | --- |
 | pirate_token | This value can be found in the Admin Console |
 | magic_num | One random number |
-| signature | md5(magic_num + pirate_token + pirate_key) |
+| signature | md5(`${magicNum}${pirate_token} + pirate_token + pirate_key`) |
 <br>
 
 ## 2) Get acceptable price list<br>
@@ -167,7 +167,7 @@ Body: {options}
 | Customer's ip address | browser_ip_address | optional | string(65) | 293.242.53.21 | Payee's ip address |
 | Customer's mac address | browser_mac_address | optional | string(65) | 00-14-22-01-23-45 | Payee's mac address |
 |Magic Number | magicNum | yes | int | 888 | One random number |
-| Static Signature | signature | yes | string(32) | id83ud84ufje73h skd93hr5ghs83j | md5(magic_num + '' + amount + payment_method + pirate_token + notify_url + return_url + pirate_key) |
+| Static Signature | signature | yes | string(32) | id83ud84ufje73h skd93hr5ghs83j | md5(`${magicNum}${amount}${payment_method}${pirate_token}${order_num || ''}${notify_url}${return_url}${pirate_key}`) |
 <br>
 
 ## 4) Get payment status<br>
@@ -180,7 +180,7 @@ Method: GET
 | pirate_token | This value can be found in the Admin Console |
 | payment_token | This token can be found in the return response from the initiate payment method above - `#3` |
 | magicNum | One random number |
-| signature | md5(magic_num + pirate_token + payment_token + pirate_key) |
+| signature | md5(`${transaction_status}${message}${payment_token}${amount}${pirate_token}${order_num || ''}${pirate_key}`) |
 
 <br><br>
 
